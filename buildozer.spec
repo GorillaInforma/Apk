@@ -1,26 +1,25 @@
-name: Build APK
+[app]
+title = Mi Mini App
+package.name = minimapp
+package.domain = com.miniapp.leon
 
-on:
-  workflow_dispatch:
+source.dir =.
+source.include_exts = py,png,jpg,kv,atlas
+source.exclude_exts = spec
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+version = 0.1
+requirements = python3,kivy
+orientation = portrait
+fullscreen = 0
 
-      - name: Instalar dependencias
-        run: |
-          sudo apt update
-          sudo apt install -y openjdk-17-jdk zip unzip git python3-pip
-          pip install Cython==0.29.33 buildozer
+# Configuración Android necesaria para que no falle en la nube
+android.permissions = INTERNET
+android.api = 33
+android.minapi = 21
+android.ndk = 25b
+android.accept_sdk_license = True
+android.archs = arm64-v8a, armeabi-v7a
 
-      - name: Compilar APK
-        run: |
-          buildozer -v android debug
-
-      - name: Subir APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: mi-apk
-          path: bin/*.apk
+[buildozer]
+log_level = 2
+warn_on_root = 1
