@@ -5,15 +5,21 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+
+      - name: Poner Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - name: Instalar dependencias
         run: |
           sudo apt update
-          sudo apt install -y openjdk-17-jdk zip unzip git python3-pip
-          pip install Cython==0.29.33 buildozer
+          sudo apt install -y openjdk-17-jdk python3-pip zip unzip git libltdl-dev libffi-dev libssl-dev build-essential autoconf libtool pkg-config zlib1g-dev libncurses5-dev
+          pip install --upgrade pip
+          pip install "Cython==0.29.36" buildozer
 
       - name: Compilar APK
         run: |
@@ -24,3 +30,4 @@ jobs:
         with:
           name: mi-apk
           path: bin/*.apk
+          if-no-files-found: error
